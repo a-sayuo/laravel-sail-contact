@@ -2,66 +2,64 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Models\Contact;
+use Illuminate\Http\Request; // フォーム送信データを受け取るためのクラス
+use App\Models\Contact;      // お問い合わせモデル（DBとやりとりする）
 
 class ContactController extends Controller
 {
-    // フォーム表示
+    // ユーザー側：フォーム表示
     public function create()
     {
-        return view('contact.create');
+        return view('contacts.create');
+        // resources/views/contacts/create.blade.php を表示
     }
 
-    // 保存処理
+    // ユーザー側：送信処理
     public function store(Request $request)
     {
-        $validated = $request->validate([
+        // バリデーション（必須チェック）
+        $request->validate([
             'name' => 'required',
             'email' => 'required|email',
             'message' => 'required',
         ]);
 
-        Contact::create($validated);
+        // DBに保存
+        Contact::create($request->all());
 
-        return redirect('/contacts')->with('success', 'お問い合わせを受け付けました！');
+        // 保存後に一覧画面へリダイレクト
+        return redirect('/contacts');
     }
 
-    // 一覧表示
+    // 管理側：一覧表示
     public function index()
     {
-        $contacts = Contact::all();
-        return view('contact.index', compact('contacts'));
+        $contacts = Contact::all(); // 全件取得
+        return view('contacts.index', compact('contacts'));
+        // contacts/index.blade.php に $contacts を渡して表示
     }
 
-    // 編集画面
+    // 管理側：編集画面（詳細＋編集）
     public function edit($id)
     {
-        $contact = Contact::findOrFail($id);
-        return view('contact.edit', compact('contact'));
+        $contact = Contact::findOrFail($id); // IDで検索、なければ404
+        return view('contacts.edit', compact('contact'));
+        // contacts/edit.blade.php に $contact を渡して表示
     }
 
-    // 更新処理
+    // 管理側：更新処理
     public function update(Request $request, $id)
     {
-        $validated = $request->validate([
-            'name' => 'required',
-            'email' => 'required|email',
-            'message' => 'required',
-        ]);
-
-        $contact = Contact::findOrFail($id);
-        $contact->update($validated);
-
-        return redirect('/contacts')->with('success', '更新しました！');
+        $contact = Contact::findOrFail($id); // IDで検索
+        $contact->update($request->all());   // 入力内容で更新
+        return redirect('/contacts')->with('success', '更新しました！');// 一覧へ戻る
     }
 
-    // 削除処理
+    // 管理側：削除処理
     public function destroy($id)
     {
-        $contact = Contact::findOrFail($id);
-        $contact->delete();
-
-        return redirect('/contacts')->with('success', '削除しました！');
+        $contact = Contact::findOrFail($id); // IDで検索
+        $contact->delete();                  // 削除
+        return redirect('/contacts');        // 一覧へ戻る
     }
 }

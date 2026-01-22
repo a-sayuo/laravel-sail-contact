@@ -2,6 +2,14 @@
 
 use Illuminate\Support\Facades\Route; // ルーティング機能を使うためのクラス
 use App\Http\Controllers\ContactController; // 作成するコントローラを読み込む
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
+
+//強制的に/contactsへリダイレクト
+Route::get('/', fn() => redirect('/contacts'));
+
+//Fortifyのデフォルトでなく、自作コントローラを呼ぶように変更
+Route::post('/login', [AuthenticatedSessionController::class, 'store'])->name('login.store');
+Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
 
 // ユーザー側：お問い合わせフォーム表示
 Route::get('/contact', [ContactController::class, 'create']); 

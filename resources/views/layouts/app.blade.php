@@ -67,6 +67,16 @@
     </style>
 </head>
 <body>
+    {{ auth()->check() ? 'ログイン中' : '未ログイン' }}
+    
+    {{-- ログインしている時だけ表示 --}}
+    @auth
+        <form method="POST" action="{{ route('logout') }}" style="text-align:right; margin:10px;">
+            @csrf
+            <button type="submit">ログアウト</button>
+        </form>
+    @endauth
+
     <div class="container">
         @yield('content')
     </div>

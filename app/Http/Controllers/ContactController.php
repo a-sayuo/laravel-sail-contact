@@ -52,7 +52,7 @@ class ContactController extends Controller
     {
         $contact = Contact::findOrFail($id); // IDで検索
         $contact->update($request->all());   // 入力内容で更新
-        return redirect('/contacts')->with('success', '更新しました！');// 一覧へ戻る
+        return redirect('/contacts')->with('success', '更新しました！'); // 一覧へ戻る
     }
 
     // 管理側：削除処理

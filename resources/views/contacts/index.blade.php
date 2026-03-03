@@ -18,6 +18,8 @@
                 <th>ID</th>
                 <th>名前</th>
                 <th>メール</th>
+                <th>カテゴリ</th>
+                <th>担当者</th>
                 <th class="action-col">操作</th>
             </tr>
         </thead>
@@ -27,12 +29,16 @@
                     <td>{{ $contact->id }}</td>
                     <td>{{ $contact->name }}</td>
                     <td>{{ $contact->email }}</td>
+                    <td>{{ $contact->category->name ?? '未分類' }}</td>
+                    <td>{{ $contact->assignedUser->name ?? '未対応' }}</td>
+
                     <td class="text-center">
                         <div class="d-flex justify-content-center">
                             <a href="/contacts/{{ $contact->id }}/edit" class="btn btn-info btn-sm me-1">編集</a>
                             <form action="/contacts/{{ $contact->id }}/delete" method="POST" style="display:inline;">
                                 @csrf
-                                <button class="btn btn-danger btn-sm">削除</button>
+                                @method('DELETE')
+                                <button class="btn btn-danger btn-sm" onclick="return confirm('本当に削除しますか？')">削除</button>
                             </form>
                         </div>
                     </td>
@@ -40,6 +46,6 @@
             @endforeach
         </tbody>
     </table>
-
+    {{ $contacts->links() }}
 </div>
 @endsection

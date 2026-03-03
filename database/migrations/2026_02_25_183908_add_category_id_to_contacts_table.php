@@ -9,20 +9,19 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up(): void
+    public function up()
     {
         Schema::table('contacts', function (Blueprint $table) {
             $table->foreignId('category_id')
-            ->nullable()
-            ->constrained('categories')
-            ->nullOnDelete();
+                ->constrained('categories')
+                ->onDelete('cascade');
         });
     }
 
     /**
      * Reverse the migrations.
      */
-    public function down(): void
+    public function down()
     {
         Schema::table('contacts', function (Blueprint $table) {
             $table->dropForeign(['category_id']);

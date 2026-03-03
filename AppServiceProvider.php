@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use App\Providers\FortifyServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -11,7 +12,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        // FortifyServiceProvider を登録
+        $this->app->register(FortifyServiceProvider::class);
     }
 
     /**
@@ -19,7 +21,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //ページネーションをBootstrap 5の見た目にする
-        \Illuminate\Pagination\Paginator::useBootstrapFive();
+        //
     }
 }

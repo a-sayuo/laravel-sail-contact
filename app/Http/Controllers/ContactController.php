@@ -4,14 +4,15 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request; // フォーム送信データを受け取るためのクラス
 use App\Models\Contact;      // お問い合わせモデル（DBとやりとりする）
+use App\Models\Category; 
 
 class ContactController extends Controller
 {
     // ユーザー側：フォーム表示
     public function create()
     {
-        return view('contacts.create');
-        // resources/views/contacts/create.blade.php を表示
+        $categories = Category::all();
+        return view('contacts.create', compact('categories'));
     }
 
     // ユーザー側：送信処理
@@ -27,14 +28,14 @@ class ContactController extends Controller
         // DBに保存
         Contact::create($request->all());
 
-        // 保存後に一覧画面へリダイレクト
-        return redirect('/contacts');
+        // ログインが必要な /contacts ではなく、誰でも見れる /contact に戻す
+        return redirect('/contact')->with('success', 'お問い合わせを送信しました。ありがとうございます！');
     }
 
     // 管理側：一覧表示
     public function index()
     {
-        $contacts = Contact::all(); // 全件取得
+        $contacts = Contact::latest()->paginate(10); //最新順に取得（10ずつ）
         return view('contacts.index', compact('contacts'));
         // contacts/index.blade.php に $contacts を渡して表示
     }
@@ -43,7 +44,9 @@ class ContactController extends Controller
     public function edit($id)
     {
         $contact = Contact::findOrFail($id); // IDで検索、なければ404
-        return view('contacts.edit', compact('contact'));
+        $categories = Category::all();
+        $users = \App\Models\User::all();
+        return view('contacts.edit', compact('contact', 'categories', 'users'));
         // contacts/edit.blade.php に $contact を渡して表示
     }
 

@@ -64,6 +64,19 @@
         button:hover {
             background: #45a049;
         }
+        .btn-center {
+            display: block;
+            width: fit-content;
+            margin: 0 auto 20px;
+            background: #89cf8b;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 4px;
+            text-decoration: none;
+        }
+        .btn-center:hover {
+            background: #45a049;
+        }
     </style>
 </head>
 <body>

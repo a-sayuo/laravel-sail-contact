@@ -70,6 +70,18 @@
                 <textarea name="message" class="form-control">{{ old('message', $contact->message) }}</textarea>
             </div>
 
+            <div class="mb-3">
+                <label class="form-label">担当者</label>
+                <select name="assigned_user_id" class="form-control">
+                    <option value="">担当者を選択してください</option>
+                    @foreach($users as $user)
+                    <option value="{{ $user->id }}" {{ $contact->assigned_user_id == $user->id ? 'selected' : '' }}>
+                        {{ $user->name }}
+                    </option>
+                    @endforeach
+                </select>
+            </div>
+
             <div class="text-center">
                 <button class="btn btn-primary px-4">更新</button>
                 <a href="/contacts" class="btn btn-secondary px-4">戻る</a>

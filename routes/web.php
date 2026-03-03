@@ -2,6 +2,11 @@
 
 use Illuminate\Support\Facades\Route; // ルーティング機能を使うためのクラス
 use App\Http\Controllers\ContactController; // 作成するコントローラを読み込む
+use App\Http\Controllers\CategoryController;   // 作成するコントローラを読み込む
+
+Route::get('/debug-form', function() {
+    return 'ログインなしで見れるページです！';
+});
 
 //強制的に/contactsへリダイレクト
 Route::get('/', fn() => redirect('/contacts'));
@@ -32,4 +37,9 @@ Route::middleware(['auth'])->group(function () {
     // 管理側：削除処理
     Route::post('/contacts/{id}/delete', [ContactController::class, 'destroy']); 
     // POST /contacts/◯◯/delete に送信されたら ContactController の destroy() を呼ぶ
+
+    // 管理側：カテゴリー一覧表示
+    Route::resource('categories', CategoryController::class); 
+    
+    // GET /categories にアクセスしたら CategoryController の index() を呼ぶ
 });

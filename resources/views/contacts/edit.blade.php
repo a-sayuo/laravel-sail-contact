@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
     <meta charset="UTF-8">
     <title>お問い合わせ編集</title>
@@ -7,34 +8,55 @@
 
     <style>
         body {
-            background-color: #eceff1; /* 落ち着いたブルーグレイ */
+            background-color: #eceff1;
+            /* 落ち着いたブルーグレイ */
         }
+
         .admin-card {
             background: #ffffff;
             border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
             padding: 2rem;
             max-width: 700px;
-            margin: 3rem auto; /* 中央寄せ */
+            margin: 3rem auto;
+            /* 中央寄せ */
         }
+
         h1 {
-            color: #37474f; /* 濃いブルーグレイでアクセント */
+            color: #37474f;
+            /* 濃いブルーグレイでアクセント */
             text-align: center;
             margin-bottom: 1.5rem;
         }
+
         .btn-primary {
-            background-color: #90a4ae; /* グレイッシュブルー */
+            background-color: #90a4ae;
+            /* グレイッシュブルー */
             border: none;
         }
+
         .btn-primary:hover {
             background-color: #607d8b;
         }
+
         .btn-secondary {
             background-color: #b0bec5;
             border: none;
         }
+
+        .form-select {
+            border: 1px solid #cfd8dc;
+            /* 枠線を少し薄く */
+            cursor: pointer;
+        }
+
+        .form-select:focus {
+            border-color: #90a4ae;
+            box-shadow: 0 0 0 0.25rem rgba(144, 164, 174, 0.25);
+        }
     </style>
 </head>
+
 <body>
     <div class="admin-card">
         <h1>お問い合わせ編集</h1>
@@ -72,12 +94,13 @@
 
             <div class="mb-3">
                 <label class="form-label">担当者</label>
-                <select name="assigned_user_id" class="form-control">
+                <select name="assigned_user_id" class="form-select">
                     <option value="">担当者を選択してください</option>
-                    @foreach($users as $user)
-                    <option value="{{ $user->id }}" {{ $contact->assigned_user_id == $user->id ? 'selected' : '' }}>
-                        {{ $user->name }}
-                    </option>
+                    @foreach ($users as $user)
+                        <option value="{{ $user->id }}"
+                            {{ $contact->assigned_user_id == $user->id ? 'selected' : '' }}>
+                            {{ $user->name }}
+                        </option>
                     @endforeach
                 </select>
             </div>
@@ -87,6 +110,38 @@
                 <a href="/contacts" class="btn btn-secondary px-4">戻る</a>
             </div>
         </form>
+
+        <hr class="my-4">
+
+        <h3>社内メモ</h3>
+
+        <ul class="list-group mb-3">
+            @foreach ($contact->memos as $memo)
+                <li class="list-group-item">
+                    {{ $memo->body }}
+                    <div class="text-muted small">
+                        {{ $memo->created_at->format('Y-m-d H:i') }}
+                    </div>
+                </li>
+            @endforeach
+        </ul>
+
+        <form action="/memos" method="POST">
+            @csrf
+
+            <input type="hidden" name="contact_id" value="{{ $contact->id }}">
+
+            <div class="mb-3">
+                <label class="form-label">新しいメモ</label>
+                <textarea name="body" class="form-control" rows="3"></textarea>
+            </div>
+
+            <button class="btn btn-secondary">メモを追加</button>
+        </form>
+
+
+
     </div>
 </body>
+
 </html>

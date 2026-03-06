@@ -1,8 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Route; // ルーティング機能を使うためのクラス
-use App\Http\Controllers\ContactController; // 作成するコントローラを読み込む
-use App\Http\Controllers\CategoryController;   // 作成するコントローラを読み込む
+use App\Http\Controllers\ContactController;
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\MemoController;
 
 Route::get('/debug-form', function() {
     return 'ログインなしで見れるページです！';
@@ -40,6 +41,9 @@ Route::middleware(['auth'])->group(function () {
 
     // 管理側：カテゴリー一覧表示
     Route::resource('categories', CategoryController::class); 
-    
     // GET /categories にアクセスしたら CategoryController の index() を呼ぶ
+
+    //管理側：メモの保存実行
+    Route::post('/memos', [MemoController::class, 'store']);
+    // POST /memos に送信されたら MemoController の store() を呼ぶ
 });

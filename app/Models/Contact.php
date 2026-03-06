@@ -17,7 +17,7 @@ class Contact extends Model
     ];
 
     // 担当者とのリレーション
-            public function assignedUser()
+    public function assignedUser()
     {
         return $this->belongsTo(User::class, 'assigned_user_id');
     }
@@ -27,5 +27,11 @@ class Contact extends Model
     {
         return $this->belongsTo(Category::class, 'category_id');
     }
+
+    // メモとのリレーション
+    public function memos()
+{
+    return $this->hasMany(Memo::class);
+}
 
 }

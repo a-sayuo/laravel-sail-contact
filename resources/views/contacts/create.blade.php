@@ -22,16 +22,18 @@
     </div>
 
     {{-- ★ ここにカテゴリ選択を追加 ★ --}}
-    <div class="mb-3">
-        <label class="form-label">カテゴリ</label>
-        <select name="category_id" class="form-control">
+        <div class="mb-3">
+            <label for="name" class="form-label">カテゴリ</label>
+            <select name="category_id" class="form-select">
+            <option value="">未分類</option>
             @foreach ($categories as $category)
-                <option value="{{ $category->id }}" {{ old('category_id') == $category->id ? 'selected' : '' }}>
+                <option value="{{ $category->id }}"
+                    {{ old('category_id') == $category->id ? 'selected' : '' }}>
                     {{ $category->name }}
                 </option>
             @endforeach
-        </select>
-    </div>
+            </select>
+        </div>
 
     <div class="mb-3">
         <label class="form-label">お問い合わせ内容</label>

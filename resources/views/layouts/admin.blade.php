@@ -38,16 +38,61 @@
             text-align: center;
             white-space: nowrap;
         }
+        .btn-primary {
+        background-color: #90a4ae;
+        border: none;
+        }
+        .btn-primary:hover {
+        background-color: #607d8b;
+        }
+        /* ページネーション カスタムカラー */
+        .pagination .page-link {
+            color: #546e7a;
+            border-color: #cfd8dc;
+        }
+        .pagination .page-item.active .page-link {
+            background-color: #546e7a;
+            border-color: #546e7a;
+            color: #fff;
+        }
+        .pagination .page-link:hover {
+            background-color: #cfd8dc;
+            color: #37474f;
+        }
     </style>
 </head>
 <body>
 
     {{-- ログイン中だけログアウトボタン --}}
     @auth
-        <form method="POST" action="{{ route('logout') }}" style="text-align:right; margin:10px;">
-            @csrf
-            <button type="submit">ログアウト</button>
-        </form>
+        <nav style="background-color: #546e7a; padding: 0.75rem 1.5rem; display: flex; justify-content: space-between; align-items: center;">
+            
+            {{-- 左側：ページリンク --}}
+            <div style="display: flex; gap: 1rem;">
+                <a href="/contacts"
+                   style="color: {{ request()->is('contacts*') ? '#fff' : '#cfd8dc' }};
+                          text-decoration: none;
+                          font-weight: {{ request()->is('contacts*') ? 'bold' : 'normal' }};">
+                    お問い合わせ一覧
+                </a>
+                <a href="/categories"
+                   style="color: {{ request()->is('categories*') ? '#fff' : '#cfd8dc' }};
+                          text-decoration: none;
+                          font-weight: {{ request()->is('categories*') ? 'bold' : 'normal' }};">
+                    カテゴリ管理
+                </a>
+            </div>
+    
+            {{-- 右側：ログアウト --}}
+            <form method="POST" action="{{ route('logout') }}">
+                @csrf
+                <button type="submit"
+                    style="background: none; border: 1px solid #cfd8dc; color: #fff; padding: 0.25rem 0.75rem; border-radius: 4px; cursor: pointer;">
+                    ログアウト
+                </button>
+            </form>
+    
+        </nav>
     @endauth
 
     @yield('content')

@@ -92,6 +92,19 @@
                 <textarea name="message" class="form-control">{{ old('message', $contact->message) }}</textarea>
             </div>
 
+                    <div class="mb-3">
+            <label for="name" class="form-label">カテゴリ</label>
+            <select name="category_id" class="form-select">
+            <option value="">未分類</option>
+            @foreach ($categories as $category)
+                <option value="{{ $category->id }}"
+                    {{ old('category_id', $contact->category_id) == $category->id ? 'selected' : '' }}>
+                    {{ $category->name }}
+                </option>
+            @endforeach
+            </select>
+        </div>
+
             <div class="mb-3">
                 <label class="form-label">担当者</label>
                 <select name="assigned_user_id" class="form-select">

@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request; // フォーム送信データを受け取るためのクラス
 use App\Models\Contact;      // お問い合わせモデル（DBとやりとりする）
 use App\Models\Category; 
+use App\Http\Requests\StoreContactRequest;
+use App\Http\Requests\UpdateContactRequest;
 
 class ContactController extends Controller
 {
@@ -16,23 +17,10 @@ class ContactController extends Controller
     }
 
     // ユーザー側：送信処理
-    public function store(Request $request)
+    public function store(StoreContactRequest $request)
     {
-        // バリデーション（必須チェック）
-        $request->validate([
-            'name' => 'required|max:50',
-            'email' => 'required|email',
-            'message' => 'required|max:10000',
-        ]);
-
         // DBに保存
-        Contact::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'message' => $request->message,
-            'category_id' => $request->category_id,
-            'assigned_user_id' => $request->assigned_user_id,
-        ]);
+        Contact::create($request->validated());
 
         // ログインが必要な /contacts ではなく、誰でも見れる /contact に戻す
         return redirect('/contact')->with('success','お問い合わせを送信しました。ありがとうございます！');
@@ -57,24 +45,10 @@ class ContactController extends Controller
     }
 
     // 管理側：更新処理
-    public function update(Request $request, $id)
+    public function update(UpdateContactRequest $request, $id)
     {
-        // バリデーション（必須チェック）
-        $request->validate([
-            'name' => 'required|max:50',
-            'email' => 'required|email',
-            'message' => 'required|max:10000',
-        ]);
-
         $contact = Contact::findOrFail($id); // IDで検索
-        
-        $contact->update([
-            'name' => $request->name,
-            'email' => $request->email,
-            'message' => $request->message,
-            'category_id' => $request->category_id,
-            'assigned_user_id' => $request->assigned_user_id,
-        ]);
+        $contact->update($request->validated());
 
         return redirect('/contacts')->with('success','お問合せを更新しました！'); // 一覧へ戻る
     }

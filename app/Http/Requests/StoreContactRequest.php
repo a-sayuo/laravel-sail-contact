@@ -26,6 +26,8 @@ class StoreContactRequest extends FormRequest
             'email' => ['required', 'email', 'max:50'],
             'message' => ['required', 'max:10000'],
             'category_id' => ['nullable', 'exists:categories,id'],
+            'prefecture' => ['nullable', 'string'],
+            'city' => ['nullable', 'string'],
         ];
     }
 }

@@ -27,6 +27,8 @@ class UpdateContactRequest extends FormRequest
             'message' => ['required', 'max:10000'],
             'category_id' => ['nullable', 'exists:categories,id'],
             'assigned_user_id' => ['nullable', 'exists:users,id'],
+            'prefecture' => ['nullable', 'string'],
+            'city' => ['nullable', 'string'],
         ];
     }
 }

@@ -14,6 +14,8 @@ class Contact extends Model
         'message',
         'assigned_user_id',
         'category_id',
+        'prefecture',
+        'city',
     ];
 
     // 担当者とのリレーション

@@ -8,6 +8,28 @@
         </div>
     @endif
 
+    {{-- 天気予報エリア --}}
+    <div id="weather-box"
+        style="
+    background-color: #f5f9fc;
+    border: 1px solid #cfd8dc;
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+    text-align: center;
+    ">
+        <p id="weather-loading" style="color: #90a4ae;">天気情報を取得中...</p>
+
+        <div id="weather-content" style="display: none;">
+            <p id="weather-date" style="color: #546e7a; font-size: 0.9rem; margin-bottom: 0.25rem;"></p>
+            <img id="weather-icon" src="" alt="天気アイコン" style="width: 60px;">
+            <p id="weather-telop" style="font-size: 1.1rem; font-weight: bold; color: #37474f; margin: 0.25rem 0;"></p>
+            <p id="weather-temp" style="color: #546e7a; margin: 0;"></p>
+        </div>
+
+        <p id="weather-error" style="color: #e57373; display: none;">天気情報を取得できませんでした</p>
+    </div>
+
     <form action="/contact" method="POST">
         @csrf
 
@@ -120,4 +142,47 @@
             });
         </script>
     </form>
+
+    <script>
+        // 東京の地域コード
+        const CITY_CODE = '130010';
+        const API_URL = 'https://weather.tsukumijima.net/api/forecast/city/' + CITY_CODE;
+
+        // fetchでAPIにアクセスする
+        fetch(API_URL)
+            .then(function(response) {
+                // レスポンスをJSONに変換する
+                // ※APIからは文字列で返ってくるので、JSが扱えるオブジェクトに変換する必要がある
+                return response.json();
+            })
+            .then(function(data) {
+                // forecasts[0] が今日、[1] が明日、[2] が明後日
+                const today = data.forecasts[0];
+
+                // 日付・天気・アイコン・気温を取り出す
+                const date = today.date; // 例：2026-04-08
+                const telop = today.telop; // 例：晴れ
+                const icon = today.image.url; // 天気アイコンのURL
+                const maxTemp = today.temperature.max.celsius ?? '-'; // 最高気温
+                const minTemp = today.temperature.min.celsius ?? '-'; // 最低気温
+
+                // ?? とは：左側がnull/undefinedだったら右側の値を使う演算子
+                // 気温データがない場合に '-' を表示するため使っている
+
+                // HTMLに値をセットする
+                document.getElementById('weather-date').textContent = date + ' 今日の天気（東京）';
+                document.getElementById('weather-icon').src = icon;
+                document.getElementById('weather-telop').textContent = telop;
+                document.getElementById('weather-temp').textContent = '最高：' + maxTemp + '℃　最低：' + minTemp + '℃';
+
+                // 「取得中...」を隠して、天気情報を表示する
+                document.getElementById('weather-loading').style.display = 'none';
+                document.getElementById('weather-content').style.display = 'block';
+            })
+            .catch(function(error) {
+                // fetchが失敗したとき（ネットワークエラーなど）
+                document.getElementById('weather-loading').style.display = 'none';
+                document.getElementById('weather-error').style.display = 'block';
+            });
+    </script>
 @endsection

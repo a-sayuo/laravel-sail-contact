@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route; // ルーティング機能を使うため
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\MemoController;
+use App\Http\Controllers\CheckerController;
 
 Route::get('/debug-form', function() {
     return 'ログインなしで見れるページです！';
@@ -19,6 +20,11 @@ Route::get('/contact', [ContactController::class, 'create']);
 // ユーザー側：お問い合わせ送信（保存）
 Route::post('/contact', [ContactController::class, 'store']); 
 // POST /contact に送信されたら ContactController の store() を呼ぶ
+
+//配信チェッカーページ表示用
+    Route::get('/checker', [CheckerController::class, 'index']);
+//APIデータ取得用
+    Route::get('/checker/api', [CheckerController::class, 'getData']);
 
 // 管理側（ログイン必須）
 Route::middleware(['auth'])->group(function () {

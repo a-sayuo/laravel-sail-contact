@@ -15,15 +15,24 @@ class CheckerController extends Controller
     // APIデータをJSONで返す
     public function getData()
     {
-        $youtubeData = $this->getYouTubeData();
-        $twitchData = $this->getTwitchData();
+        //tryの中でエラーが起きたらcatchに飛ぶ
+        try {
+            $youtubeData = $this->getYouTubeData();
+            $twitchData = $this->getTwitchData();
 
-        // APIからのデータを表示
-        return response()->json([
-            'youtube' => $youtubeData,
-            'twitch' => $twitchData,
+            return response()->json([
+                'youtube' => $youtubeData,
+                'twitch' => $twitchData,
+            ]);
 
-        ]);
+        } catch (\Exception $e) {
+            //エラーが起きても画面が壊れないよう空データを返す
+            return response()->json([
+                'youtube' => [],
+                'twitch' => [],
+                'error' => 'データの取得に失敗しました',
+            ], 500);  //500はサーバーエラーを意味するHTTPステータスコード
+        }
     }
 
     private function getYouTubeData()
